@@ -1,0 +1,269 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Quán 396 | Ứng dụng quản lý website</title>
+<meta name="robots" content="noindex,nofollow">
+<style>
+:root{--wine:#831b24;--wine2:#4e121c;--gold:#e9b454;--cream:#fff8ec;--bg:#f6f5f2;--line:#e7e2db;--ink:#23252a;--muted:#6f737b}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif}
+button,input,select,textarea{font:inherit}button{cursor:pointer}button:disabled{opacity:.45;cursor:not-allowed}
+.app{display:grid;grid-template-columns:250px minmax(0,1fr);min-height:100vh}
+.side{background:linear-gradient(155deg,var(--wine2),#701c24 70%,#952f29);color:#fff;padding:28px 18px;display:flex;flex-direction:column;gap:22px}
+.brand{display:flex;gap:12px;align-items:center;padding:5px 7px 22px;border-bottom:1px solid #ffffff30}
+.brand-mark{width:49px;height:49px;border-radius:15px;background:var(--gold);display:grid;place-items:center;font-size:25px;color:#431713;box-shadow:0 8px 20px #0002}
+.brand strong{font-size:20px;line-height:1.2;display:block}.brand small{font-size:11px;color:#f8d5bd}
+.nav{display:grid;gap:7px}.nav button{width:100%;text-align:left;border:0;background:transparent;color:#f5ddd9;padding:13px 14px;border-radius:11px;font-weight:650}
+.nav button.active,.nav button:hover{color:#fff;background:#ffffff23}.nav button span{display:inline-block;width:27px}
+.sidefoot{margin-top:auto;font-size:12px;color:#eed1cf;background:#ffffff13;border-radius:11px;padding:12px}
+.main{min-width:0;padding:28px clamp(18px,3vw,48px) 55px;max-width:1450px;width:100%}
+.top{display:flex;justify-content:space-between;align-items:flex-start;gap:15px;flex-wrap:wrap;margin-bottom:27px}
+.kicker{text-transform:uppercase;letter-spacing:.15em;color:var(--wine);font-weight:800;font-size:11px}
+h1{font-size:clamp(23px,2.6vw,34px);letter-spacing:-.035em;line-height:1.22;margin:5px 0 8px}h2{font-size:19px;letter-spacing:-.025em;margin:0 0 13px}h3{font-size:15px;margin:0 0 13px}
+.sub{color:var(--muted);font-size:13px;margin:0}.actions{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.btn{border:1px solid var(--line);background:white;color:var(--ink);border-radius:10px;padding:10px 15px;font-size:13px;font-weight:750;display:inline-flex;align-items:center;justify-content:center;gap:7px}
+.btn:hover{filter:brightness(.96)}.btn.primary{background:var(--wine);color:white;border-color:var(--wine)}.btn.gold{background:var(--gold);border-color:var(--gold);color:#45150f}.btn.warn{color:var(--wine);border-color:#edc8c2}
+.page{display:none}.page.active{display:block}.panel{border:1px solid var(--line);background:#fff;border-radius:17px;padding:23px;box-shadow:0 5px 22px #28222206}
+.panel+.panel{margin-top:18px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}.three{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.stat{border:1px solid var(--line);border-radius:13px;padding:16px;background:var(--cream)}.stat b{font-size:27px;color:var(--wine);display:block}.stat small{color:var(--muted)}
+label{display:block;font-size:12px;color:#545963;font-weight:750;margin:0 0 6px}.field{width:100%;border:1px solid #dcd8d3;border-radius:10px;background:#fff;padding:11px 12px;outline:0;color:var(--ink)}
+.field:focus{border-color:var(--wine);box-shadow:0 0 0 3px #831b241b}textarea.field{min-height:97px;resize:vertical}
+.fgroup{margin-bottom:15px}.help{font-size:12px;color:var(--muted);margin:7px 0 0}
+.note{background:#fff7e8;border:1px solid #f0d6a5;padding:15px 17px;border-radius:12px;color:#74501d;font-size:13px}
+.success{color:#23673e}.bad{color:#9e2a2a}.statusline{font-size:13px;padding:10px 0;min-height:38px}
+.tablebox{border:1px solid var(--line);border-radius:13px;overflow:hidden;max-height:580px;overflow-y:auto}
+table{width:100%;border-collapse:collapse}th{text-align:left;background:#faf8f5;color:#6a6665;font-size:12px;padding:12px;position:sticky;top:0}
+td{padding:11px 12px;border-top:1px solid #efede8;font-size:13px}tr[role=button]{cursor:pointer}tr[role=button]:hover,tr.selected{background:#fff7eb}
+td strong{display:block;color:#282325}.chip{font-size:11px;color:#874a21;background:#fff2df;padding:4px 7px;border-radius:6px}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.between{justify-content:space-between}.stack{display:grid;gap:12px}
+#foodForm{display:none}#foodForm.visible{display:block}.muted{color:var(--muted)}
+.hr{border:0;border-top:1px solid var(--line);margin:20px 0}
+.piclist{display:grid;gap:10px}.pic{display:grid;grid-template-columns:72px minmax(0,1fr);align-items:center;gap:13px;padding:11px;border:1px solid var(--line);border-radius:10px}
+.pic img{width:72px;height:62px;object-fit:cover;border-radius:7px;background:#eee}
+.preview{font-size:11px;color:var(--muted);word-break:break-all}
+code{background:#f3efeb;padding:2px 5px;border-radius:4px}
+ol li{padding:3px 0}a{color:var(--wine)}
+@media(max-width:1050px){.grid{grid-template-columns:1fr}.three{grid-template-columns:1fr 1fr}}
+@media(max-width:720px){.app{display:block}.side{padding:11px 14px;gap:8px}.brand{padding:4px;border:0}.brand-mark{width:38px;height:38px;font-size:20px}.brand strong{font-size:16px}.nav{display:flex;overflow:auto;gap:4px}.nav button{white-space:nowrap;width:auto;padding:8px 9px;font-size:12px}.nav button span{width:auto}.sidefoot{display:none}.main{padding:20px 12px 48px}.panel{padding:16px}.three{grid-template-columns:1fr 1fr}td,th{padding:9px 6px;font-size:11px}}
+</style>
+</head>
+<body>
+<div class="app">
+<aside class="side">
+  <div class="brand"><div class="brand-mark">🍳</div><div><strong>QUÁN ĂN 396</strong><small>TRUNG TÂM QUẢN LÝ WEBSITE</small></div></div>
+  <nav class="nav" aria-label="Mục quản lý">
+    <button data-tab="home" class="active"><span>◫</span> Tổng quan</button>
+    <button data-tab="menu"><span>▦</span> Thực đơn</button>
+    <button data-tab="info"><span>✎</span> Thông tin quán</button>
+    <button data-tab="photos"><span>▣</span> Hình ảnh</button>
+    <button data-tab="publish"><span>↑</span> Xuất bản</button>
+  </nav>
+  <div class="sidefoot">🔒 Không lưu mã truy cập GitHub trên thiết bị. Không tự động thay đổi website.</div>
+</aside>
+<main class="main">
+<header class="top">
+  <div><div class="kicker">Bảng điều khiển • phiên bản 1.0</div><h1 id="pageTitle">Quản lý Quán Ăn 396</h1><p class="sub">Thay đổi thực đơn, giá, số điện thoại, khuyến mãi và ảnh khi cần.</p></div>
+  <div class="actions"><button class="btn" id="previewBtn" disabled>👁 Xem trước</button><button class="btn primary" id="downloadBtn" disabled>↓ Tải HTML đã sửa</button></div>
+</header>
+<div class="note" style="margin-bottom:18px"><strong>Quan trọng:</strong> Nội dung tệp GitHub hiện có khác một số thông tin trên <a href="https://quanan396.life/" target="_blank" rel="noopener noreferrer">website đang hoạt động</a>. Hãy xác minh website đang triển khai từ kho mã này trước khi đưa sửa đổi lên mạng.</div>
+<div id="status" class="statusline" role="status" aria-live="polite">Chưa mở tệp website. Vui lòng kết nối GitHub hoặc chọn tệp HTML.</div>
+
+<section class="page active" id="page-home">
+  <div class="three" style="margin-bottom:18px">
+    <div class="stat"><b id="countMenu">0</b><small>Món trong thực đơn</small></div>
+    <div class="stat"><b id="countGroup">0</b><small>Nhóm món ăn</small></div>
+    <div class="stat"><b id="countStatus">Chưa</b><small>Trạng thái dữ liệu</small></div>
+  </div>
+  <div class="grid">
+    <article class="panel">
+      <h2>① Kết nối GitHub</h2><p class="sub" style="margin-bottom:16px">Ứng dụng đọc và chỉnh sửa tệp website tại kho của anh.</p>
+      <div class="fgroup"><label for="token">Mã truy cập GitHub (Fine-grained token)</label><input id="token" class="field" type="password" autocomplete="off" placeholder="Dán mã GitHub tại đây"><p class="help">Chỉ cấp quyền Contents: Read and write cho kho <b>quanan396</b>. Không gửi mã này cho người khác.</p></div>
+      <button class="btn primary" id="connectBtn">🔗 Kết nối và đọc tệp</button>
+      <p class="help">Mã chỉ giữ tạm trong bộ nhớ trang đang mở; đóng trang sẽ mất.</p>
+    </article>
+    <article class="panel">
+      <h2>② Hoặc mở tệp trên máy</h2><p class="sub" style="margin-bottom:16px">Không cần mã GitHub để thử sửa và tải tệp mới.</p>
+      <label for="fileInput">Chọn tệp website định dạng .html</label>
+      <input class="field" id="fileInput" type="file" accept=".html,text/html">
+      <p class="help">Có thể tải file <code>gemini-code-1792419665282.html</code> từ kho GitHub. Sau khi sửa, nhấn “Tải HTML đã sửa”.</p>
+    </article>
+  </div>
+  <article class="panel" style="margin-top:18px">
+    <h2>Hướng dẫn ngắn</h2><div class="grid"><div><b>Chỉnh sửa</b><ol><li>Kết nối GitHub hoặc chọn tệp HTML.</li><li>Vào Thực đơn / Thông tin quán / Hình ảnh.</li><li>Nhập nội dung mới và bấm Lưu thay đổi.</li></ol></div><div><b>Đưa thay đổi lên mạng</b><ol><li>Xem trước và đối chiếu thông tin.</li><li>Vào Xuất bản.</li><li>Chọn tải tệp hoặc cập nhật GitHub khi đã xác minh hệ thống triển khai.</li></ol></div></div>
+  </article>
+</section>
+
+<section class="page" id="page-menu">
+ <div class="grid" style="grid-template-columns:minmax(0,1.3fr) minmax(270px,.7fr)">
+  <article class="panel"><div class="row between" style="margin-bottom:15px"><h2 style="margin:0">Danh sách món</h2><button id="addFood" class="btn gold">＋ Thêm món mới</button></div>
+   <input class="field" id="foodSearch" placeholder="🔎 Tìm theo tên món..." style="margin-bottom:12px" aria-label="Tìm món">
+   <div class="tablebox"><table><thead><tr><th>Tên món</th><th>Nhóm</th><th>Giá</th></tr></thead><tbody id="menuRows"><tr><td colspan="3">Chưa có dữ liệu</td></tr></tbody></table></div>
+  </article>
+  <article class="panel"><h2>Thông tin món ăn</h2><p id="selectHint" class="sub">Chọn một món bên trái hoặc thêm món mới để chỉnh sửa.</p>
+   <form id="foodForm">
+    <div class="fgroup"><label for="foodName">Tên món</label><input class="field" id="foodName" required maxlength="130"></div>
+    <div class="fgroup"><label for="foodCat">Nhóm món</label><select id="foodCat" class="field"><option value="bo-ne">Bò Né</option><option value="bit-tet">Bò Bít Tết</option><option value="mi-cay">Mì Cay</option><option value="mon-them">Món Thêm</option><option value="thuc-uong">Thức Uống</option></select></div>
+    <div class="fgroup"><label for="foodPrice">Giá tính tiền (VNĐ)</label><input class="field" id="foodPrice" required type="number" min="0" max="100000000" step="1000"></div>
+    <div class="fgroup"><label for="foodPriceText">Giá hiển thị (ví dụ 55.000đ)</label><input class="field" id="foodPriceText" maxlength="60" required></div>
+    <div class="fgroup"><label for="foodDesc">Mô tả món</label><textarea class="field" id="foodDesc" maxlength="600"></textarea></div>
+    <div class="row"><button class="btn primary" type="submit">✓ Lưu thay đổi</button><button class="btn warn" id="deleteFood" type="button">Xóa món</button></div>
+   </form>
+  </article>
+ </div>
+</section>
+
+<section class="page" id="page-info">
+ <article class="panel"><h2>Cập nhật thông tin và ưu đãi</h2><p class="sub" style="margin-bottom:19px">Ứng dụng thay những thông tin tương ứng trong tệp HTML đang mở.</p>
+ <form id="infoForm" class="grid">
+ <div><div class="fgroup"><label for="phone">Số điện thoại / Zalo hiển thị</label><input class="field" id="phone" placeholder="0392 755 766"></div>
+ <div class="fgroup"><label for="hours">Giờ mở cửa</label><input class="field" id="hours" placeholder="06:00 - 22:00"></div></div>
+ <div><div class="fgroup"><label for="promotion">Ưu đãi hôm nay</label><textarea class="field" id="promotion" placeholder="Tặng bánh mì nóng giòn..."></textarea></div>
+ <button type="submit" class="btn primary">✓ Lưu thông tin quán</button></div>
+ </form></article>
+</section>
+
+<section class="page" id="page-photos">
+ <article class="panel"><h2>Hình ảnh website</h2><p class="sub" style="margin-bottom:17px">Có thể đổi đường dẫn ảnh đã tải lên máy chủ. Nếu chọn ảnh trong máy, anh cần tải ảnh đó lên hệ thống lưu trữ trước.</p>
+ <div class="piclist" id="picList"><p class="muted">Chưa mở tệp website.</p></div><div class="row" style="margin-top:17px"><button id="savePhotos" class="btn primary">✓ Lưu đường dẫn ảnh</button></div></article>
+</section>
+
+<section class="page" id="page-publish">
+ <div class="grid">
+ <article class="panel">
+ <h2>Kiểm tra và tải xuống</h2><p class="sub" style="margin-bottom:17px">Tạo bản HTML mới trên máy tính, không tác động website trực tiếp.</p>
+ <div class="row"><button class="btn" id="previewBtn2" disabled>👁 Xem trước</button><button class="btn primary" id="downloadBtn2" disabled>↓ Tải HTML mới</button></div><p class="help" id="changeInfo">Chưa có nội dung cần xuất.</p>
+ </article>
+ <article class="panel">
+ <h2>Ghi thay đổi lên GitHub</h2><p class="sub" style="margin-bottom:15px">Chỉ hoạt động sau khi kết nối bằng mã GitHub có quyền cập nhật kho.</p>
+ <div class="note" style="margin-bottom:15px">Việc cập nhật <b>main</b> có thể ảnh hưởng website nếu máy chủ tự triển khai. Hãy kiểm tra tên miền và các thông tin khác biệt trước khi xác nhận.</div>
+ <button id="publishBtn" class="btn gold" disabled>↑ Xác nhận cập nhật GitHub</button>
+ <p class="help">Lưu lịch sử thay đổi với lời nhắn "Cập nhật nội dung Quán Ăn 396 qua app".</p>
+ </article>
+ </div>
+</section>
+</main></div>
+<script>
+'use strict';
+const REPO='bathanh1969ai-ops/quanan396';
+const FILE='gemini-code-1792419665282.html';
+const CAT={'bo-ne':'Bò Né','bit-tet':'Bò Bít Tết','mi-cay':'Mì Cay','mon-them':'Món Thêm','thuc-uong':'Thức Uống'};
+const q=id=>document.getElementById(id);
+let token='',raw='',sha='',mode='',data=[],selected=null,photos=[],oldInfo={},info={},dirty=false, busy=false;
+const safe=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const clean=s=>String(s??'').replace(/[<>]/g,'').trim();
+const fmt=v=>Number(v||0).toLocaleString('vi-VN')+'đ';
+function message(msg,kind=''){q('status').textContent=msg;q('status').className='statusline '+kind}
+function setTab(id){document.querySelectorAll('.page').forEach(el=>el.classList.toggle('active',el.id==='page-'+id));document.querySelectorAll('.nav button').forEach(el=>el.classList.toggle('active',el.dataset.tab===id));q('pageTitle').textContent=({home:'Quản lý Quán Ăn 396',menu:'Chỉnh sửa thực đơn',info:'Thông tin và khuyến mãi',photos:'Hình ảnh website',publish:'Xem trước và xuất bản'})[id]}
+document.querySelectorAll('[data-tab]').forEach(el=>el.addEventListener('click',()=>setTab(el.dataset.tab)));
+function b64decode(s){const bin=atob(s.replace(/\s/g,'')),buf=Uint8Array.from(bin,x=>x.charCodeAt(0));return new TextDecoder().decode(buf)}
+function b64encode(s){const a=new TextEncoder().encode(s);let r='';for(let i=0;i<a.length;i+=16384){r+=String.fromCharCode(...a.subarray(i,i+16384))}return btoa(r)}
+function menuSpan(s){const m=/const\s+MENU_ITEMS\s*=\s*(\[[\s\S]*?\])\s*;/.exec(s);if(!m)throw Error('Không tìm thấy mảng MENU_ITEMS trong tệp HTML.');return m}
+function parseMenu(s){
+ const src=menuSpan(s)[1];let output='',quote='',escape=false,line=false,block=false;
+ for(let i=0;i<src.length;i++){const c=src[i],n=src[i+1];
+ if(line){if(c==='\n'){line=false;output+=c}continue}
+ if(block){if(c==='*'&&n==='/'){block=false;i++}continue}
+ if(quote){output+=c;if(escape){escape=false}else if(c==='\\'){escape=true}else if(c===quote){quote=''}continue}
+ if(c==='"'||c==="'"){quote=c;output+=c;continue}
+ if(c==='/'&&n==='/'){line=true;i++;continue}
+ if(c==='/'&&n==='*'){block=true;i++;continue}
+ output+=c;
+ }
+ output=output.replace(/([{,]\s*)([A-Za-z_$][\w$]*)(\s*:)/g,'$1"$2"$3').replace(/,\s*([}\]])/g,'$1');
+ const items=JSON.parse(output);
+ if(!Array.isArray(items)||!items.every(x=>Number.isFinite(x.id)&&typeof x.name==='string'&&Number.isFinite(x.price)))throw Error('Dữ liệu thực đơn không đúng cấu trúc.');
+ return items;
+}
+function parsePhotos(s){
+ const matches=[...s.matchAll(/<img\b[^>]*\bsrc="([^"]+)"[^>]*>/gi)].map(m=>m[1]);
+ return [...new Set(matches)].map(src=>({original:src,value:src}));
+}
+function loadSource(s,sourced,sourceSha=''){
+ const items=parseMenu(s);raw=s;mode=sourced;sha=sourceSha;data=items.map(x=>({...x}));selected=null;dirty=false;
+ photos=parsePhotos(s);
+ const ph=(s.match(/Hotline\s*\/\s*Zalo:\s*([+0-9\s.()-]+)/i)||[])[1]||'';
+ const hours=(s.match(/Phục Vụ\s*\((\d\d:\d\d\s*[-–]\s*\d\d:\d\d)\)/i)||[])[1]||'';
+ const promo=(s.match(/<strong>Ưu đãi hôm nay:<\/strong>\s*([^<]+)/i)||[])[1]||'';
+ oldInfo={phone:ph.trim(),hours:hours.trim(),promotion:promo.trim(),digits:((s.match(/href="tel:([0-9]+)"/)||[])[1]||'')};
+ info={phone:oldInfo.phone,hours:oldInfo.hours,promotion:oldInfo.promotion};
+ q('phone').value=info.phone;q('hours').value=info.hours;q('promotion').value=info.promotion;
+ renderAll();message('✓ Đã mở '+items.length+' món từ '+(sourced==='github'?'GitHub':'tệp trên máy')+'. Chưa có thay đổi nào được xuất bản.','success');
+}
+function renderAll(){
+ q('countMenu').textContent=data.length;q('countGroup').textContent=new Set(data.map(x=>x.category)).size;
+ q('countStatus').textContent=raw?(dirty?'Đã sửa':'Đã mở'):'Chưa';
+ for(const id of ['previewBtn','downloadBtn','previewBtn2','downloadBtn2'])q(id).disabled=!raw;
+ q('publishBtn').disabled=!raw||mode!=='github'||!token||busy;
+ q('changeInfo').textContent=raw?(dirty?'Có thay đổi chưa xuất bản. Hãy kiểm tra trước khi lưu.':'Chưa sửa nội dung kể từ lúc mở tệp.'):'Chưa mở tệp.';
+ renderMenu();renderPhotos();
+}
+function markDirty(){dirty=true;renderAll()}
+function renderMenu(){
+ const search=q('foodSearch').value.trim().toLowerCase(),filtered=data.filter(x=>x.name.toLowerCase().includes(search));
+ q('menuRows').innerHTML=filtered.length?filtered.map(x=>'<tr role="button" tabindex="0" data-id="'+x.id+'" class="'+(selected===x.id?'selected':'')+'"><td><strong>'+safe(x.name)+'</strong><span class="muted">#'+x.id+'</span></td><td><span class="chip">'+safe(x.categoryLabel||CAT[x.category]||x.category)+'</span></td><td>'+safe(x.priceText||fmt(x.price))+'</td></tr>').join(''):'<tr><td colspan="3">Không tìm thấy món nào.</td></tr>';
+ q('menuRows').querySelectorAll('tr[data-id]').forEach(el=>{const fn=()=>selectFood(Number(el.dataset.id));el.addEventListener('click',fn);el.addEventListener('keydown',e=>{if(e.key==='Enter')fn()})});
+}
+function selectFood(id){const item=data.find(x=>x.id===id);if(!item)return;selected=id;q('selectHint').style.display='none';q('foodForm').classList.add('visible');
+ q('foodName').value=item.name;q('foodCat').value=item.category;q('foodPrice').value=item.price;q('foodPriceText').value=item.priceText||fmt(item.price);q('foodDesc').value=item.description||'';renderMenu();
+}
+q('foodSearch').addEventListener('input',renderMenu);
+q('addFood').addEventListener('click',()=>{if(!raw)return message('Hãy mở tệp HTML trước.','bad');const id=Math.max(0,...data.map(x=>Number(x.id)))+1;data.push({id,name:'Món mới',price:10000,priceText:'10.000đ',category:'bo-ne',categoryLabel:'Bò Né',description:''});selectFood(id);markDirty();setTab('menu');q('foodName').focus()});
+q('foodPrice').addEventListener('input',()=>{if(q('foodPriceText').dataset.manual!=='yes')q('foodPriceText').value=fmt(q('foodPrice').value)});
+q('foodPriceText').addEventListener('input',()=>{q('foodPriceText').dataset.manual='yes'});
+q('foodForm').addEventListener('submit',e=>{e.preventDefault();const item=data.find(x=>x.id===selected);if(!item)return;
+ item.name=clean(q('foodName').value);item.category=q('foodCat').value;item.categoryLabel=CAT[item.category];item.price=Math.round(Number(q('foodPrice').value));item.priceText=clean(q('foodPriceText').value);item.description=clean(q('foodDesc').value);
+ if(!item.name||item.price<0||!Number.isFinite(item.price))return message('Vui lòng kiểm tra tên món và giá tiền.','bad');
+ q('foodPriceText').dataset.manual='no';markDirty();message('✓ Đã lưu thay đổi món: '+item.name,'success');
+});
+q('deleteFood').addEventListener('click',()=>{if(selected===null)return;const a=data.find(x=>x.id===selected);if(!confirm('Xóa món "'+a.name+'" khỏi thực đơn?'))return;data=data.filter(x=>x.id!==selected);selected=null;q('foodForm').classList.remove('visible');q('selectHint').style.display='';markDirty();message('✓ Đã xóa món khỏi bản đang chỉnh sửa.','success')});
+q('infoForm').addEventListener('submit',e=>{e.preventDefault();const phone=q('phone').value.trim(),hours=q('hours').value.trim(),promo=q('promotion').value.trim();
+ if(phone&&!/^[0-9+(). -]{9,20}$/.test(phone))return message('Số điện thoại không hợp lệ.','bad');
+ if(hours&&!/^\d\d:\d\d\s*[-–]\s*\d\d:\d\d$/.test(hours))return message('Giờ mở cửa cần dạng 06:00 - 22:00.','bad');
+ info={phone,hours,promotion:promo};markDirty();message('✓ Đã lưu thông tin quán trong bản nháp.','success')});
+function renderPhotos(){
+ q('picList').innerHTML=photos.length?photos.map((p,i)=>'<div class="pic"><img src="'+safe(p.value)+'" alt="Xem ảnh '+(i+1)+'" onerror="this.style.opacity=.2"><div><label for="photo'+i+'">Ảnh '+(i+1)+'</label><input id="photo'+i+'" class="field" data-photo="'+i+'" value="'+safe(p.value)+'"><div class="preview">Nguồn ban đầu: '+safe(p.original)+'</div></div></div>').join(''):'<p class="muted">Tệp không có ảnh hoặc chưa mở dữ liệu.</p>';
+}
+q('savePhotos').addEventListener('click',()=>{if(!raw)return message('Hãy mở tệp website trước.','bad');
+ q('picList').querySelectorAll('[data-photo]').forEach(el=>{const x=el.value.trim();if(x&&!/^(https?:\/\/|\.{0,2}\/|[a-zA-Z0-9_-])/.test(x))throw Error('Đường dẫn ảnh không hợp lệ');photos[Number(el.dataset.photo)].value=x});
+ markDirty();message('✓ Đã lưu đường dẫn ảnh trong bản nháp.','success')});
+
+function addMissingPhotoFallbacks(html){
+  const assets={"hero-bo-ne.jpg":"data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22960%22%20height%3D%22640%22%20viewBox%3D%220%200%20960%20640%22%3E%3Crect%20width%3D%22960%22%20height%3D%22640%22%20fill%3D%22%23291516%22%2F%3E%3Ccircle%20cx%3D%22480%22%20cy%3D%22255%22%20r%3D%22178%22%20fill%3D%22%2362291b%22%20stroke%3D%22%23efb549%22%20stroke-width%3D%2211%22%2F%3E%3Ctext%20x%3D%22480%22%20y%3D%22322%22%20text-anchor%3D%22middle%22%20font-size%3D%22170%22%3E%F0%9F%8D%B3%3C%2Ftext%3E%3Ctext%20x%3D%22480%22%20y%3D%22510%22%20text-anchor%3D%22middle%22%20font-family%3D%22Arial%2Csans-serif%22%20font-size%3D%2248%22%20font-weight%3D%22bold%22%20fill%3D%22%23fff1d7%22%3EB%C3%92%20N%C3%89%20CH%E1%BA%A2O%20GANG%3C%2Ftext%3E%3Ctext%20x%3D%22480%22%20y%3D%22567%22%20text-anchor%3D%22middle%22%20font-family%3D%22Arial%2Csans-serif%22%20font-size%3D%2225%22%20fill%3D%22%23f7c87b%22%3EH%C3%ACnh%20minh%20h%E1%BB%8Da%20%E2%80%94%20Ch%E1%BB%9D%20thay%20%E1%BA%A3nh%20th%E1%BA%ADt%3C%2Ftext%3E%3C%2Fsvg%3E","bo-bit-tet.jpg":"data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22960%22%20height%3D%22640%22%20viewBox%3D%220%200%20960%20640%22%3E%3Crect%20width%3D%22960%22%20height%3D%22640%22%20fill%3D%22%23291516%22%2F%3E%3Ccircle%20cx%3D%22480%22%20cy%3D%22255%22%20r%3D%22178%22%20fill%3D%22%2362291b%22%20stroke%3D%22%23efb549%22%20stroke-width%3D%2211%22%2F%3E%3Ctext%20x%3D%22480%22%20y%3D%22322%22%20text-anchor%3D%22middle%22%20font-size%3D%22170%22%3E%F0%9F%A5%A9%3C%2Ftext%3E%3Ctext%20x%3D%22480%22%20y%3D%22510%22%20text-anchor%3D%22middle%22%20font-family%3D%22Arial%2Csans-serif%22%20font-size%3D%2248%22%20font-weight%3D%22bold%22%20fill%3D%22%23fff1d7%22%3EB%C3%92%20B%C3%8DT%20T%E1%BA%BET%3C%2Ftext%3E%3Ctext%20x%3D%22480%22%20y%3D%22567%22%20text-anchor%3D%22middle%22%20font-family%3D%22Arial%2Csans-serif%22%20font-size%3D%2225%22%20fill%3D%22%23f7c87b%22%3EH%C3%ACnh%20minh%20h%E1%BB%8Da%20%E2%80%94%20Ch%E1%BB%9D%20thay%20%E1%BA%A3nh%20th%E1%BA%ADt%3C%2Ftext%3E%3C%2Fsvg%3E","mi-cay-drinks.jpg":"data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22960%22%20height%3D%22640%22%20viewBox%3D%220%200%20960%20640%22%3E%3Crect%20width%3D%22960%22%20height%3D%22640%22%20fill%3D%22%23291516%22%2F%3E%3Ccircle%20cx%3D%22480%22%20cy%3D%22255%22%20r%3D%22178%22%20fill%3D%22%2362291b%22%20stroke%3D%22%23efb549%22%20stroke-width%3D%2211%22%2F%3E%3Ctext%20x%3D%22480%22%20y%3D%22322%22%20text-anchor%3D%22middle%22%20font-size%3D%22170%22%3E%F0%9F%8D%9C%3C%2Ftext%3E%3Ctext%20x%3D%22480%22%20y%3D%22510%22%20text-anchor%3D%22middle%22%20font-family%3D%22Arial%2Csans-serif%22%20font-size%3D%2248%22%20font-weight%3D%22bold%22%20fill%3D%22%23fff1d7%22%3EM%C3%8C%20CAY%20V%C3%80%20TH%E1%BB%A8C%20U%E1%BB%90NG%3C%2Ftext%3E%3Ctext%20x%3D%22480%22%20y%3D%22567%22%20text-anchor%3D%22middle%22%20font-family%3D%22Arial%2Csans-serif%22%20font-size%3D%2225%22%20fill%3D%22%23f7c87b%22%3EH%C3%ACnh%20minh%20h%E1%BB%8Da%20%E2%80%94%20Ch%E1%BB%9D%20thay%20%E1%BA%A3nh%20th%E1%BA%ADt%3C%2Ftext%3E%3C%2Fsvg%3E","quan-an-space.jpg":"data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22960%22%20height%3D%22640%22%20viewBox%3D%220%200%20960%20640%22%3E%3Crect%20width%3D%22960%22%20height%3D%22640%22%20fill%3D%22%23291516%22%2F%3E%3Ccircle%20cx%3D%22480%22%20cy%3D%22255%22%20r%3D%22178%22%20fill%3D%22%2362291b%22%20stroke%3D%22%23efb549%22%20stroke-width%3D%2211%22%2F%3E%3Ctext%20x%3D%22480%22%20y%3D%22322%22%20text-anchor%3D%22middle%22%20font-size%3D%22170%22%3E%F0%9F%8F%A0%3C%2Ftext%3E%3Ctext%20x%3D%22480%22%20y%3D%22510%22%20text-anchor%3D%22middle%22%20font-family%3D%22Arial%2Csans-serif%22%20font-size%3D%2248%22%20font-weight%3D%22bold%22%20fill%3D%22%23fff1d7%22%3EKH%C3%94NG%20GIAN%20QU%C3%81N%3C%2Ftext%3E%3Ctext%20x%3D%22480%22%20y%3D%22567%22%20text-anchor%3D%22middle%22%20font-family%3D%22Arial%2Csans-serif%22%20font-size%3D%2225%22%20fill%3D%22%23f7c87b%22%3EH%C3%ACnh%20minh%20h%E1%BB%8Da%20%E2%80%94%20Ch%E1%BB%9D%20thay%20%E1%BA%A3nh%20th%E1%BA%ADt%3C%2Ftext%3E%3C%2Fsvg%3E"};
+  for (const [name,url] of Object.entries(assets)){
+    const escaped=name.replace(/[.*+?^\u0024{}()|[\]\\]/g,'\\function buildHtml(){');
+    const re=new RegExp('(<img\\b[^>]*?\\bsrc="'+escaped+'")','g');
+    html=html.replace(re,m=>m+' onerror="this.onerror=null;this.src=\\\''+url+'\\\'"');
+  }
+  return html;
+}
+
+function buildHtml(){
+ if(!raw)throw Error('Chưa mở tệp HTML');
+ let s=raw;s=s.replace(/(const\s+MENU_ITEMS\s*=\s*)\[[\s\S]*?\](\s*;)/,(full,a,b)=>a+JSON.stringify(data,null,2)+b);
+ if(oldInfo.phone&&info.phone)s=s.split(oldInfo.phone).join(safe(info.phone));
+ if(oldInfo.digits&&info.phone){const digits=info.phone.replace(/\D/g,'');if(!digits)throw Error('Số điện thoại không hợp lệ');s=s.split(oldInfo.digits).join(digits)}
+ if(oldInfo.hours&&info.hours)s=s.split(oldInfo.hours).join(info.hours);
+ if(oldInfo.promotion){s=s.replace(/(<strong>Ưu đãi hôm nay:<\/strong>\s*)([^<]*)/i,(full,a)=>a+safe(info.promotion))}
+ photos.forEach(p=>{if(p.value!==p.original&&p.value){const from='src="'+p.original+'"',to='src="'+safe(p.value)+'"';s=s.split(from).join(to)}});
+ return addMissingPhotoFallbacks(s);
+}
+function download(){try{const s=buildHtml(),url=URL.createObjectURL(new Blob([s],{type:'text/html;charset=utf-8'})),a=document.createElement('a');a.href=url;a.download='quanan396-da-chinh-sua.html';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),5000);message('✓ Đã tạo tệp HTML mới. Website hiện tại chưa bị thay đổi.','success')}catch(err){message(err.message,'bad')}}
+function preview(){try{const url=URL.createObjectURL(new Blob([buildHtml()],{type:'text/html;charset=utf-8'}));window.open(url,'_blank','noopener,noreferrer');setTimeout(()=>URL.revokeObjectURL(url),60000)}catch(err){message(err.message,'bad')}}
+['downloadBtn','downloadBtn2'].forEach(id=>q(id).addEventListener('click',download));
+['previewBtn','previewBtn2'].forEach(id=>q(id).addEventListener('click',preview));
+function api(path,opts={}){return fetch('https://api.github.com/repos/'+REPO+path,{...opts,headers:{Accept:'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28',Authorization:'Bearer '+token,...(opts.headers||{})}}).then(async r=>{const d=await r.json().catch(()=>({}));if(!r.ok)throw Error((d.message||'GitHub trả về lỗi')+' (HTTP '+r.status+')');return d})}
+q('connectBtn').addEventListener('click',async()=>{const val=q('token').value.trim();if(!val)return message('Nhập mã truy cập GitHub trước.','bad');token=val;q('token').value='';q('connectBtn').disabled=true;message('Đang đọc tệp từ GitHub...');
+ try{const d=await api('/contents/'+encodeURIComponent(FILE)+'?ref=main');loadSource(b64decode(d.content),'github',d.sha)}
+ catch(err){token='';message('Không kết nối được: '+err.message,'bad')}finally{q('connectBtn').disabled=false;renderAll()}});
+q('fileInput').addEventListener('change',async e=>{const file=e.target.files[0];if(!file)return;try{loadSource(await file.text(),'local');token='';renderAll()}catch(err){message('Không mở được tệp: '+err.message,'bad')}});
+q('publishBtn').addEventListener('click',async()=>{if(!raw||!token||mode!=='github'||busy)return;
+ if(!confirm('XÁC NHẬN: Ghi thay đổi vào nhánh main của kho '+REPO+'? Việc này có thể kích hoạt triển khai website.'))return;
+ try{busy=true;renderAll();message('Đang lưu bản sửa vào GitHub...');
+ const s=buildHtml(),updated=await api('/contents/'+encodeURIComponent(FILE),{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:'Cập nhật nội dung Quán Ăn 396 qua app',content:b64encode(s),sha,branch:'main'})});
+ sha=updated.content.sha;raw=s;oldInfo={...info,digits:info.phone.replace(/\D/g,'')};photos=photos.map(p=>({original:p.value,value:p.value}));dirty=false;
+ message('✓ Đã cập nhật GitHub thành công. Cần kiểm tra riêng việc triển khai tại quanan396.life.','success');
+ }catch(err){message('Không cập nhật được GitHub: '+err.message+'. Hãy kiểm tra quyền hoặc tải lại phiên bản mới.','bad')}finally{busy=false;renderAll()}});
+renderAll();
+</script>
+</body></html>
